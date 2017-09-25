@@ -371,25 +371,25 @@ void print_boom_switch(const char *message, Stream *output)
 }
 
 // ----------------- Camera -------------- //
-void read_camera(UCAMII *camera, Stream *output)
-{
-  short x = 0;
-  int bytes;
-  if (camera->init())
-  {
-    camera->takePicture();
-    while (bytes = camera->getData())
-    {
-      for (x = 0; x < bytes; x++)
-      {
-        output->print("0x");
-        output->print(camera->imgBuffer[x], HEX);
-        output->print(" ");
-      }
-    }
-    output->println("\n\n\n\n");
-  }
-}
+// void read_camera(UCAMII *camera, Stream *output)
+// {
+//   short x = 0;
+//   int bytes;
+//   if (camera->init())
+//   {
+//     camera->takePicture();
+//     while (bytes = camera->getData())
+//     {
+//       for (x = 0; x < bytes; x++)
+//       {
+//         output->print("0x");
+//         output->print(camera->imgBuffer[x], HEX);
+//         output->print(" ");
+//       }
+//     }
+//     output->println("\n\n\n\n");
+//   }
+// }
 // ------------ Stack Analysis ------------ //
 
 struct StackAnalyzer

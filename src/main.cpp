@@ -15,7 +15,7 @@ const float DEPLOY_MAX_PRESSURE = 44.0;
 #include <TinyGPS++.h>
 #include <Wire.h>
 #include <semphr.h> // add the FreeRTOS functions for Semaphores (or Flags).
-#include <uCamII.h>
+//#include <uCamII.h>
 #include <MedianFilter.h>
 #include <BoomDeploy.hpp>
 #include "messages.h" // Defines incoming data header
@@ -27,7 +27,7 @@ Adafruit_MCP9808 sensor_temp_in = Adafruit_MCP9808();
 Adafruit_BNO055 sensor_gyro = Adafruit_BNO055();
 CoolSatBaro sensor_baro;
 TinyGPSPlus sensor_gps;
-UCAMII camera(Serial1, &Serial);
+//UCAMII camera(Serial1, &Serial);
 
 File file;
 
@@ -231,14 +231,14 @@ void TaskDeployBoom(void *pvParameters)
   const float DEPLOY_MAX_PRESSURE = 44.0;
 
   Stream *out[] = {&Serial, &Serial3, (Stream *)nullptr};
-  Stream *camera_out[] = {(Stream *)nullptr};
+  //Stream *camera_out[] = {(Stream *)nullptr};
 
   StackAnalyzer analyze(nullptr, "TaskDeployBoom");
 
   boom.deployed = false;
 
-  char *camera_messages[] = {"\n****************Camera Taking Photo*****************\n",
-                             "\n****************Camera Done Taking Photo*****************\n"};
+  //char *camera_messages[] = {"\n****************Camera Taking Photo*****************\n",
+  //                           "\n****************Camera Done Taking Photo*****************\n"};
 
   bool deployInitiated = false;
   bool deployConfirmed = false;
@@ -278,8 +278,8 @@ void TaskDeployBoom(void *pvParameters)
         }
       break;
 
-      case TAKE_PHOTO:
-        critical_out(&camera, read_camera, file_names[7], camera_out, out, camera_messages);
+      // case TAKE_PHOTO:
+      //   critical_out(&camera, read_camera, file_names[7], camera_out, out, camera_messages);
       break;
     }
 
@@ -322,7 +322,7 @@ void TaskDeployBoom(void *pvParameters)
         critical_out((void *)nullptr, print_boom, file_names[8], out);
 
         // take picture after boom deployment
-        critical_out(&camera, read_camera, file_names[7], camera_out, out, camera_messages);
+        // critical_out(&camera, read_camera, file_names[7], camera_out, out, camera_messages);
       }
 
       boom.deployed = true;
