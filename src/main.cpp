@@ -44,7 +44,7 @@ void TaskGPSRead(void *pvParameters);
 
 void cutWire(int delay, int wirePin, Stream **out);
 
-// define semaphores
+// define semaphores (mutex)
 SemaphoreHandle_t xOutputSemaphore;
 SemaphoreHandle_t xSDSemaphore;
 
@@ -61,7 +61,7 @@ Stream *input_streams[] = {&Serial, &Serial3, (Stream *)nullptr};
 /**
  *Global setup should occur here
  */
-
+// the setup function runs once when you press reset or power the board
 void setup()
 {
 
@@ -101,7 +101,7 @@ void setup()
     }
   }
 
-  Wire.begin(); // Begining everying on our I2C Bus
+  Wire.begin(); // Beginning everying on our I2C Bus
 
   // Initialize sensors
   // These functions should be defined in sensor.h
@@ -114,7 +114,7 @@ void setup()
   pinMode(SECONDARY_WIRE_CUTTER, OUTPUT); // TODO: secondary wire cutter
   pinMode(BOOM_SWITCH, INPUT);
 
-  // Now set up two tasks to run independently
+  // Now set up multiple tasks to run independently
   xTaskCreate(
       TaskSensorReadStandard, (const portCHAR *)"ReadSensors", 700 // Stack size
       ,
@@ -343,7 +343,7 @@ void cutWire(int delay, int wirePin, Stream **out)
 }
 
 void TaskGPSRead(void *pvParameters)
-{
+{ 
   (void)pvParameters;
 
   StackAnalyzer analyze(nullptr, "GPSRead");
