@@ -70,12 +70,12 @@ void setup()
   Serial2.begin(9600);
   Serial3.begin(9600);
 
-  Serial.println("\n\nInitializing SD card...");
+  // Serial.println("\n\nInitializing SD card...");
   if (!SD.begin(46))
   {
-    Serial.println("\nSD card failed to initialize!");
+    // Serial.println("\nSD card failed to initialize!");
   }
-  Serial.println("\nSD Initialized\n\n");
+  // Serial.println("\nSD Initialized\n\n");
 
   for (int i = 0; i < num_files; i++)
   {
@@ -174,11 +174,13 @@ void TaskSensorReadStandard(void *pvParameters)
     files[i].close();
   }
 
-  Stream *out[] = {&Serial, &Serial3, (Stream *)nullptr};
+  // Stream *out[] = {&Serial, &Serial3, (Stream *)nullptr};
+  Stream *out[] = {&Serial3, (Stream *)nullptr, (Stream *)nullptr};
   message_out("\n barometer\ttemp-in\ttemp-ex\tlight\tuv\ttimestamp\tvoltage\t", out);
   for (;;)
   {
-    vTaskDelay(1000 / portTICK_PERIOD_MS);\
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    Serial.println("picture");
     sensor_out(&analyze, read_stack, file_names[11], nullptr);
     sensor_out(&sensor_baro, read_baro, file_names[0], out);
     sensor_out(&sensor_temp_in, read_temp_in, file_names[1], out);
@@ -230,7 +232,8 @@ void TaskDeployBoom(void *pvParameters)
   const float DEPLOY_MIN_PRESSURE = 30.0;
   const float DEPLOY_MAX_PRESSURE = 44.0;
 
-  Stream *out[] = {&Serial, &Serial3, (Stream *)nullptr};
+  // Stream *out[] = {&Serial, &Serial3, (Stream *)nullptr};
+  Stream *out[] = {&Serial3, (Stream *)nullptr, (Stream *)nullptr};
   //Stream *camera_out[] = {(Stream *)nullptr};
 
   StackAnalyzer analyze(nullptr, "TaskDeployBoom");
@@ -250,7 +253,7 @@ void TaskDeployBoom(void *pvParameters)
 
   for (;;)
   {
-
+    Serial.println("picture");
     filter.addDataPoint(baro.pressure);
     float valPressure = filter.getFilteredDataPoint();
     baro.median = valPressure;
@@ -278,7 +281,8 @@ void TaskDeployBoom(void *pvParameters)
         }
       break;
 
-      // case TAKE_PHOTO:
+      case TAKE_PHOTO:
+        Serial.println("picture");
       //   critical_out(&camera, read_camera, file_names[7], camera_out, out, camera_messages);
       break;
     }
